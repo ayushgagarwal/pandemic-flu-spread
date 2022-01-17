@@ -4,8 +4,9 @@ The project is about modeling of pandemic spread in a classroom of 21 elementary
 
 Through our simulations (1000 simulations), we found that the average infection lasts in the class lasts between 4-19 days with an average of 9 days.
 
-The Code.Rmd file contains the entire code. You can simply open the file in R studio and run the file.
-It has been commented for clarity.
+Report.pdf talks about the findings in detail.
+
+The Code.Rmd file contains the entire code. You can simply open the file in R studio and run the file. It has been commented for clarity. Code_compiled.pdf has just been created if you want to go through the code without opening it on R studio.
 
 Required libraries in R
 - deSolve
