@@ -1,0 +1,337 @@
+---
+title: "Project"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r warning=FALSE}
+# Initializing the libraries
+library(deSolve)
+library(ggplot2)
+library(reshape2)
+```
+
+```{r}
+# Setting the population size (21 kids in the school)
+N=21
+```
+
+```{r}
+# Building the SIR function
+sir_model <- function(time, var, param){
+  with(as.list(c(var, param)),{
+    S_factor <- -(beta*I*S)
+    I_factor <- (beta*I*S)-(gamma*I)
+    R_factor <- gamma*I
+    return(list(c(S_factor, I_factor, R_factor)))
+  })
+}
+```
+
+```{r}
+# Setting up the parameters
+# S=No of Susceptible population
+# I=No of Infected population
+# R=No of Recovered population
+init_vals <- c(S=20,I=1,R=0)
+
+# Seting up the time period to 50 days
+time_vals <- seq(0, 50)
+
+# Setting up rates
+# beta=infection rate (per person/no of days)
+# gamma=recovery rate (/no of days)
+param_vals <- c(beta=0.02, gamma=1/3)
+```
+
+```{r}
+# Calling the SIR function with the parameters
+sir_results <- ode(init_vals, time_vals, sir_model, param_vals)
+head(sir_results)
+```
+
+```{r}
+sir_results <- as.data.frame(sir_results)
+
+# Melting the results for visualization
+sir_plot<-melt(sir_results,id="time")
+
+# Plotting the SIR model with the parameters setup
+ggplot(data = sir_plot, aes(x = time, y = value, colour = variable, group = variable)) + geom_line() + xlab("Time") + ylab("No of Kids")
+```
+
+
+```{r}
+# Building the SEIR function
+seir_model <- function(time, var, param){
+  with(as.list(c(var, param)),{
+    S_factor <- -(beta*I*S)
+    I_factor <- (beta*I*S)-(gamma*I)
+    R_factor <- gamma*I
+    E_factor <- (beta*I*S)-(delta*E)
+    return(list(c(S_factor, E_factor, I_factor, R_factor)))
+  })
+}
+```
+
+```{r}
+# Setting up the parameters
+# S=No of Susceptible population
+# E=No of Exposed population
+# I=No of Infected population
+# R=No of Recovered population
+init_vals2 <- c(S=20,E=0, I=1,R=0)
+
+# Seting up the time period to 50 days
+time_vals2 <- seq(0, 50)
+
+# Setting up rates
+# beta=infection rate (per person/no of days)
+# gamma=recovery rate (/no of days)
+# delta=exposure rate (/no of days)
+param_vals2 <- c(beta=0.02, gamma=1/3, delta=1/2)
+```
+
+```{r}
+# Calling the SEIR function with the parameters
+seir_results <- ode(init_vals2, time_vals2, seir_model, param_vals2)
+head(seir_results)
+```
+
+```{r}
+seir_results <- as.data.frame(seir_results)
+
+# Melting the results for visualization
+seir_plot<-melt(seir_results,id="time")
+
+# Plotting the SEIR model with the parameters setup
+ggplot(data = seir_plot, aes(x = time, y = value, colour = variable, group = variable)) + geom_line() + xlab("Time") + ylab("No of Kids")
+```
+
+```{r}
+# Building the SIRS function
+sirs_model <- function(time, var, param){
+  with(as.list(c(var, param)),{
+    S_factor <- -(beta*I*S)+(sigma*R)
+    I_factor <- (beta*I*S)-(gamma*I)
+    R_factor <- (gamma*I)-(sigma*R)
+    return(list(c(S_factor, I_factor, R_factor)))
+  })
+}
+```
+
+```{r}
+# Setting up the parameters
+# S=No of Susceptible population
+# I=No of Infected population
+# R=No of Recovered population
+init_vals3 <- c(S=20,I=1,R=0)
+
+# Seting up the time period to 50 days
+time_vals3 <- seq(0, 50)
+
+# Setting up rates
+# beta=infection rate (per person/no of days)
+# gamma=recovery rate (/no of days)
+# sigma=re-infection rate (/no of days)
+param_vals3 <- c(beta=0.02, gamma=1/3, sigma=1/20)
+```
+
+```{r}
+# Calling the SIRS function with the parameters
+sirs_results <- ode(init_vals3, time_vals3, sirs_model, param_vals3)
+head(sirs_results)
+```
+
+```{r}
+sirs_results <- as.data.frame(sirs_results)
+
+# Melting the results for visualization
+sirs_plot<-melt(sirs_results,id="time")
+
+# Plotting the SIRS model with the parameters setup
+ggplot(data = sirs_plot, aes(x = time, y = value, colour = variable, group = variable)) + geom_line() + xlab("Time") + ylab("No of Kids")
+```
+
+```{r}
+# Building the SEIRS function
+seirs_model <- function(time, var, param){
+  with(as.list(c(var, param)),{
+    S_factor <- -(beta*I*S)+(sigma*R)
+    I_factor <- (beta*I*S)-(gamma*I)
+    R_factor <- gamma*I-(sigma*R)
+    E_factor <- (beta*I*S)-(delta*E)
+    return(list(c(S_factor, E_factor, I_factor, R_factor)))
+  })
+}
+```
+
+```{r}
+# Setting up the parameters
+# S=No of Susceptible population
+# E=No of Exposed population
+# I=No of Infected population
+# R=No of Recovered population
+init_vals4 <- c(S=20,E=0, I=1,R=0)
+
+# Seting up the time period to 50 days
+time_vals4 <- seq(0, 50)
+
+# Setting up rates
+# beta=infection rate (per person/no of days)
+# gamma=recovery rate (/no of days)
+# delta=exposure rate (/no of days)
+# sigma=re-infection rate (/no of days)
+param_vals4 <- c(beta=0.02, gamma=1/3, delta=1/2, sigma=1/20)
+```
+
+```{r}
+# Calling the SEIRS function with the parameters
+seirs_results <- ode(init_vals4, time_vals4, seirs_model, param_vals4)
+head(seirs_results)
+```
+
+```{r}
+seirs_results <- as.data.frame(seirs_results)
+
+# Melting the results for visualization
+seirs_plot<-melt(seirs_results,id="time")
+
+# Plotting the SEIRS model with the parameters setup
+ggplot(data = seirs_plot, aes(x = time, y = value, colour = variable, group = variable)) + geom_line() + xlab("Time") + ylab("No of Kids")
+```
+
+```{r}
+# Building the SIRS function with vaccinations
+vac_model <- function(time, var, param){
+  with(as.list(c(var, param)),{
+    S_factor <- -(beta*I*S)
+    I_factor <- (beta*I*S)-(gamma*I)
+    R_factor <- gamma*I
+    return(list(c(S_factor, I_factor, R_factor)))
+  })
+}
+```
+
+```{r}
+# Setting up the parameters
+# S=No of Susceptible population (60% unvaccinated)
+# I=No of Infected population
+# R=No of Recovered population (40% vaccinated)
+init_vals5 <- c(S=0.6*20,I=1,R=0.4*20)
+
+# Seting up the time period to 50 days
+time_vals5 <- seq(0, 50)
+
+# Setting up rates
+# beta=infection rate (per person/no of days)
+# gamma=recovery rate (/no of days)
+param_vals5 <- c(beta=0.02, gamma=1/3)
+```
+
+```{r}
+# Calling the SIRS function accounting for vaccinations with the parameters
+vac_results <- ode(init_vals5, time_vals5, vac_model, param_vals5)
+head(vac_results)
+```
+
+```{r}
+vac_results <- as.data.frame(vac_results)
+
+# Melting the results for visualization
+vac_plot<-melt(vac_results,id="time")
+
+# Plotting the SIRS model accounting for vaccinations with the parameters setup
+ggplot(data = vac_plot, aes(x = time, y = value, colour = variable, group = variable)) + geom_line() + xlab("Time") + ylab("No of Kids")
+```
+
+
+```{r}
+# Simulating SIR Model 1000 times using Binomial(20,0.02)
+set.seed(100)
+x=rbinom(1000,size=20,p=0.02)/20
+x[6]
+s_result = data.frame(matrix(ncol=1000,nrow=51))
+i_result = data.frame(matrix(ncol=1000,nrow=51))
+r_result = data.frame(matrix(ncol=1000,nrow=51))
+for (val in c(1:1000))
+{
+  init_vals <- c(S=20,I=1,R=0)
+  time_vals <- seq(0, 50)
+  param_vals <- c(beta=x[val], gamma=1/3)
+  sir_results <- ode(init_vals, time_vals, sir_model, param_vals)
+  
+  i_result[,val] = sir_results[,3] 
+  s_result[,val] = sir_results[,2]
+  r_result[,val] = sir_results[,4]
+}
+
+
+```
+
+```{r}
+I=rowMeans(i_result)
+S=rowMeans(s_result)
+R=rowMeans(r_result)
+gg = cbind(S,I,R)
+head(gg)
+
+##Q(a)
+hist(as.numeric(i_result[,2]),main="Day1 - Infected - Histogram", xlab="Infected day 1")
+
+##Q(c)
+hist(as.numeric(i_result[,3]),main="Day2 - Infected - Histogram", xlab="Infected day 2")
+
+```
+
+```{r}
+
+##Q(d1)
+plot(c(0:50),I, type="l", col="blue", lwd=2, xlab="Days", ylab="Kids Infected", main="Infected Distribution")
+
+##Q(d2)
+# Threshold > 0.5
+
+ans=c()
+for (val in c(1:1000))
+{
+  ans[val] = min(which(i_result[,val] < 0.5))
+}
+h=hist(ans, main="Flu Length with Threshold of 0.5")
+unique(ans)
+h$breaks
+h$counts
+h$counts/1000
+
+```
+
+
+
+```{r}
+# Calling the SIR function with the parameters
+sir_results <- ode(init_vals, time_vals, sir_model, param_vals)
+head(sir_results)
+```
+
+```{r}
+sir_results[,3]
+report_result = data.frame(matrix(ncol=1000,nrow=51))
+```
+
+
+```{r}
+sir_results <- as.data.frame(sir_results)
+
+# Melting the results for visualization
+sir_plot<-melt(sir_results,id="time")
+
+# Plotting the SIR model with the parameters setup
+ggplot(data = sir_plot, aes(x = time, y = value, colour = variable, group = variable)) + geom_line() + xlab("Time") + ylab("No of Kids")
+
+
+```
